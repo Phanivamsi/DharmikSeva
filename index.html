@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DharmaSeva - Sacred Hindu Rituals & Pujas</title>
+    <meta name="description" content="Book verified Pujas, Classical Musicians, Artists, Cow Services, and Prasadam catering. Direct coordination, secure wallet, and Muhurtam consultation.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Dynamic Notification Banner -->
+    <div id="notification-banner" class="notification-banner">
+        <span id="notification-text">Important announcement placeholder</span>
+        <button onclick="closeNotification()">×</button>
+    </div>
+
+    <!-- Global Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="logo-diya"></div>
+                <div class="logo-text">DharmaSeva</div>
+            </div>
+            
+            <div class="role-selector">
+                <button id="btn-role-customer" class="role-btn active" onclick="switchRole('customer')">Customer Portal</button>
+                <button id="btn-role-provider" class="role-btn" onclick="switchRole('provider')">Provider Portal</button>
+                <button id="btn-role-ops" class="role-btn" onclick="switchRole('ops')">Operations Console</button>
+                <button id="btn-role-coo" class="role-btn" onclick="switchRole('coo')">CHRO Console</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ========================================================
+             CUSTOMER PORTAL VIEW
+             ======================================================== -->
+        <section id="customer-view" class="app-view active">
+            
+            <!-- CUSTOMER AUTHENTICATION BLOCK -->
+            <div id="customer-auth-section" class="auth-overlay-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2 style="color:var(--accent-gold); font-family:var(--font-heading);">Devotee Login</h2>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Sign in or create a devotee account to book rituals.</p>
+                    </div>
+                    
+                    <div class="auth-toggle-buttons">
+                        <button id="cust-auth-login-btn" class="auth-toggle-btn active" onclick="toggleAuthPane('customer', 'login')">Login</button>
+                        <button id="cust-auth-register-btn" class="auth-toggle-btn" onclick="toggleAuthPane('customer', 'register')">Register</button>
+                    </div>
+
+                    <!-- Devotee Login Form -->
+                    <form id="cust-login-form" class="auth-pane active" onsubmit="handleCustomerLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="cust-login-username">Username *</label>
+                            <input type="text" id="cust-login-username" class="form-input" placeholder="e.g., sandhya" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="cust-login-pass">Password *</label>
+                            <input type="password" id="cust-login-pass" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In</button>
+                    </form>
+
+                    <!-- Devotee Registration Form -->
+                    <form id="cust-register-form" class="auth-pane" onsubmit="handleCustomerRegister(event)">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="cust-reg-name">Full Name *</label>
+                                <input type="text" id="cust-reg-name" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cust-reg-username">Username *</label>
+                                <input type="text" id="cust-reg-username" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="cust-reg-email">Email Address *</label>
+                                <input type="email" id="cust-reg-email" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cust-reg-phone">Phone Number *</label>
+                                <input type="tel" id="cust-reg-phone" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="cust-reg-address">Delivery / Ceremony Address *</label>
+                            <textarea id="cust-reg-address" class="form-textarea" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="cust-reg-pass">Create Password *</label>
+                            <input type="password" id="cust-reg-pass" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CUSTOMER MAIN PORTAL STUFF (hidden until logged in) -->
+            <div id="customer-portal-section" style="display: none;">
+                <!-- Hero Section -->
+                <div class="customer-hero">
+                    <img id="hero-banner-img" src="assets/ritual_hero_banner.png" alt="Devotional Ritual" class="customer-hero-img" onerror="this.src='https://images.unsplash.com/photo-1609137144814-6997b69fb7a9?auto=format&fit=crop&q=80&w=1400'">
+                    <div class="customer-hero-content">
+                        <h1>Connect with Sacred Devotion</h1>
+                        <p>Book authentic Vedic Pujas, Divine Classical Performances, and sacred Cow services for your home and temples.</p>
+                        <div class="search-section">
+                            <input type="text" id="service-search" class="form-input" placeholder="Search Pujas, Dancers, Singers, Cow Vendors..." onkeyup="filterServices()">
+                            <button class="btn btn-primary" onclick="filterServices()">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation for Services: Divided into 6 Categories plus Muhurtam & Profile -->
+                <div class="tab-nav">
+                    <button class="tab-link active" onclick="switchCustomerTab(this, 'catalog', 'purohit')">🌸 Pujas & Homas</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'catalog', 'dancer')">💃 Classical Dancers</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'catalog', 'singer')">🎤 Classical Singers</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'catalog', 'musician')">🎻 Musicians</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'catalog', 'cow')">🐄 Cow Vendors</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'catalog', 'food')">🍲 Food Caterers</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'muhurtam')">📅 Muhurtam Desk</button>
+                    <button class="tab-link" onclick="switchCustomerTab(this, 'profile')">👤 My Wallet & Orders</button>
+                </div>
+
+                <!-- Catalog Sub-view -->
+                <div id="cust-tab-catalog" class="customer-sub-view active">
+                    <div class="grid-3" id="services-grid">
+                        <!-- Cards will be dynamically inserted here via customer.js -->
+                    </div>
+                </div>
+
+                <!-- Muhurtam Sub-view -->
+                <div id="cust-tab-muhurtam" class="customer-sub-view" style="display: none;">
+                    <div class="grid-2">
+                        <div class="card">
+                            <h2 style="margin-bottom: 1rem; border-bottom: 1.5px solid var(--accent-gold); padding-bottom: 8px;">How Muhurtam Consultation Works</h2>
+                            <ul style="list-style-type: none; display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem;">
+                                <li style="display: flex; gap: 15px;">
+                                    <div style="background-color: var(--accent-orange); color: var(--bg-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">1</div>
+                                    <div>
+                                        <h4 style="font-family: var(--font-body); font-weight: 600;">Submit Astro Details</h4>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Provide zodiac details, preferred style/dates, and budget parameters.</p>
+                                    </div>
+                                </li>
+                                <li style="display: flex; gap: 15px;">
+                                    <div style="background-color: var(--accent-orange); color: var(--bg-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">2</div>
+                                    <div>
+                                        <h4 style="font-family: var(--font-body); font-weight: 600;">Ops Desk Connects You</h4>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Our support desk reviews details, aligns resource schedules, and contacts you.</p>
+                                    </div>
+                                </li>
+                                <li style="display: flex; gap: 15px;">
+                                    <div style="background-color: var(--accent-orange); color: var(--bg-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">3</div>
+                                    <div>
+                                        <h4 style="font-family: var(--font-body); font-weight: 600;">Purohit Live Matching</h4>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem;">An experienced Shastri joins a direct 3-way conference to calculate two auspicious slots.</p>
+                                    </div>
+                                </li>
+                                <li style="display: flex; gap: 15px;">
+                                    <div style="background-color: var(--accent-orange); color: var(--bg-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0;">4</div>
+                                    <div>
+                                        <h4 style="font-family: var(--font-body); font-weight: 600;">Secure Booking Confirmation</h4>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Support books the package on your behalf. Pay 20% advance via wallet to lock calendar.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h2 style="margin-bottom: 1.5rem; border-bottom: 1.5px solid var(--accent-gold); padding-bottom: 8px;">Request Muhurtam Appointment</h2>
+                            <form id="muhurtam-form" onsubmit="submitMuhurtamForm(event)">
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-name">Full Name *</label>
+                                        <input type="text" id="muhurtam-name" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-phone">Contact Number *</label>
+                                        <input type="tel" id="muhurtam-phone" class="form-input" required>
+                                    </div>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-zodiac">Zodiac Sign (Rashi) *</label>
+                                        <select id="muhurtam-zodiac" class="form-select" required>
+                                            <option value="">Select Rashi...</option>
+                                            <option value="Mesha">Mesha (Aries)</option>
+                                            <option value="Vrishabha">Vrishabha (Taurus)</option>
+                                            <option value="Mithuna">Mithuna (Gemini)</option>
+                                            <option value="Karka">Karka (Cancer)</option>
+                                            <option value="Simha">Simha (Leo)</option>
+                                            <option value="Kanya">Kanya (Virgo)</option>
+                                            <option value="Tula">Tula (Libra)</option>
+                                            <option value="Vrishchika">Vrishchika (Scorpio)</option>
+                                            <option value="Dhanu">Dhanu (Sagittarius)</option>
+                                            <option value="Makara">Makara (Capricorn)</option>
+                                            <option value="Kumbha">Kumbha (Aquarius)</option>
+                                            <option value="Meena">Meena (Pisces)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-style">Preferred Tradition/Style *</label>
+                                        <select id="muhurtam-style" class="form-select" required>
+                                            <option value="South Indian">South Indian</option>
+                                            <option value="North Indian">North Indian</option>
+                                            <option value="Bengali">Bengali</option>
+                                            <option value="Maharashtrian">Maharashtrian</option>
+                                            <option value="Gujarati">Gujarati</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="muhurtam-rashi-phalam">Rashi Phalam / Specific Request Notes</label>
+                                    <textarea id="muhurtam-rashi-phalam" class="form-textarea" rows="3" placeholder="Enter birth star, specific timing needs, or matching preferences..."></textarea>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-dates">Expected Date Range *</label>
+                                        <input type="text" id="muhurtam-dates" class="form-input" placeholder="e.g., Nov 10 - Nov 15, 2026" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="muhurtam-budget">Estimated Budget Range *</label>
+                                        <select id="muhurtam-budget" class="form-select" required>
+                                            <option value="Low ($100 - $300)">Basic ($100 - $300)</option>
+                                            <option value="Medium ($300 - $800)">Standard ($300 - $800)</option>
+                                            <option value="High ($800 - $2000)">Grand Ritual ($800 - $2000)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Submit Consultation Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile & Wallet Sub-view -->
+                <div id="cust-tab-profile" class="customer-sub-view" style="display: none;">
+                    <div class="profile-layout">
+                        <!-- Left Sidebar (Contact details & Wallet) -->
+                        <div class="profile-sidebar">
+                            <div class="card" style="margin-bottom: 1.5rem;">
+                                <h3 style="margin-bottom: 1rem; text-align: center;">My Profile</h3>
+                                <div style="text-align: center; margin-bottom: 1.5rem;">
+                                    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: var(--bg-tertiary); display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; border: 2px solid var(--accent-gold); color: var(--accent-gold);">👤</div>
+                                    <h4 id="profile-name-display" style="margin-top: 10px; font-family: var(--font-body);">Devotee Name</h4>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Verified Devotee</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" id="profile-email-field" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Primary Phone</label>
+                                    <input type="text" id="profile-phone-field" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Ritual Address</label>
+                                    <textarea id="profile-address-field" class="form-textarea" rows="2"></textarea>
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:10px;">
+                                    <button class="btn btn-secondary" onclick="alert('Profile details updated!')">Save Details</button>
+                                    <button class="btn btn-danger" style="background-color:rgba(198,40,40,0.1); border:1px solid var(--accent-red); color:var(--text-primary);" onclick="handleCustomerLogout()">Logout</button>
+                                </div>
+                            </div>
+
+                            <!-- Wallet box -->
+                            <div class="card">
+                                <h3 style="text-align: center;">Dharma Wallet</h3>
+                                <div class="wallet-box">
+                                    <span style="font-size:0.8rem; color:var(--text-secondary); text-transform:uppercase;">Available Balance</span>
+                                    <div class="wallet-balance" id="customer-wallet-balance">$0.00</div>
+                                    <button class="btn btn-primary" style="font-size: 0.85rem;" onclick="addWalletFunds()">Add Funds</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Main Area (Order Management) -->
+                        <div class="profile-main">
+                            <div class="card">
+                                <h3 style="margin-bottom: 1.5rem;">My Bookings & Orders</h3>
+                                
+                                <!-- Order State Filters -->
+                                <div class="order-tabs">
+                                    <button class="order-tab-btn active" onclick="filterCustomerOrders(this, 'all')">All Orders</button>
+                                    <button class="order-tab-btn" onclick="filterCustomerOrders(this, 'upcoming')">Upcoming</button>
+                                    <button class="order-tab-btn" onclick="filterCustomerOrders(this, 'booked')">Booked/Confirmed</button>
+                                    <button class="order-tab-btn" onclick="filterCustomerOrders(this, 'completed')">Completed</button>
+                                    <button class="order-tab-btn" onclick="filterCustomerOrders(this, 'cancelled')">Cancelled</button>
+                                </div>
+
+                                <!-- Orders list container -->
+                                <div style="display: flex; flex-direction: column; gap: 15px;" id="customer-orders-list">
+                                    <!-- Populated dynamically by customer.js -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Cart Drawer -->
+                <div id="cart-drawer" class="cart-drawer card">
+                    <div class="cart-header">
+                        <span>Selected Services (<span id="cart-count">0</span>)</span>
+                        <button onclick="toggleCartDrawer(false)" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--bg-primary); font-weight:800;">×</button>
+                    </div>
+                    <div class="cart-items" id="cart-items-container">
+                        <p style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">No services selected yet</p>
+                    </div>
+                    <div class="cart-footer">
+                        <div style="display:flex; justify-content:space-between; font-weight:700;">
+                            <span>Advance Payable (20%)</span>
+                            <span id="cart-advance-total" class="service-price">$0.00</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="proceedToCheckout()">Proceed to Advance Payment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             SERVICE PROVIDER PORTAL VIEW
+             ======================================================== -->
+        <section id="provider-view" class="app-view">
+            
+            <!-- PROVIDER AUTHENTICATION BLOCK -->
+            <div id="provider-auth-section" class="auth-overlay-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2 style="color:var(--accent-gold); font-family:var(--font-heading);">Provider Gateway</h2>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Sign in to check schedule or register as a partner.</p>
+                    </div>
+                    
+                    <div class="auth-toggle-buttons">
+                        <button id="prov-auth-login-btn" class="auth-toggle-btn active" onclick="toggleAuthPane('provider', 'login')">Login</button>
+                        <button id="prov-auth-register-btn" class="auth-toggle-btn" onclick="toggleAuthPane('provider', 'register')">Register Partner</button>
+                    </div>
+
+                    <!-- Provider Login Form -->
+                    <form id="prov-login-form" class="auth-pane active" onsubmit="handleProviderLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="prov-login-username">Username *</label>
+                            <input type="text" id="prov-login-username" class="form-input" placeholder="e.g., shastri" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="prov-login-pass">Password *</label>
+                            <input type="password" id="prov-login-pass" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Enter Dashboard</button>
+                    </form>
+
+                    <!-- Provider Initial Credentials Registration -->
+                    <form id="prov-register-form" class="auth-pane" onsubmit="handleProviderRegister(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="prov-reg-username">Choose Username *</label>
+                            <input type="text" id="prov-reg-username" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="prov-reg-pass">Create Password *</label>
+                            <input type="password" id="prov-reg-pass" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Proceed to Profile Setup</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Onboarding Wizard (shown if credentials match a newly registered account) -->
+            <div id="provider-onboarding-panel" class="onboarding-wizard card" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Service Provider Registration</h2>
+                
+                <div class="wizard-steps">
+                    <div class="wizard-step active" id="step-node-1">
+                        <div class="wizard-step-num">1</div>
+                        <span style="font-size:0.75rem; font-weight:600;">Category</span>
+                    </div>
+                    <div class="wizard-step" id="step-node-2">
+                        <div class="wizard-step-num">2</div>
+                        <span style="font-size:0.75rem; font-weight:600;">Skills & Info</span>
+                    </div>
+                    <div class="wizard-step" id="step-node-3">
+                        <div class="wizard-step-num">3</div>
+                        <span style="font-size:0.75rem; font-weight:600;">Verification</span>
+                    </div>
+                </div>
+
+                <!-- Pane 1: Category Selector (Divided into 6 Choices) -->
+                <div class="wizard-pane active" id="wizard-pane-1">
+                    <h3 style="margin-bottom: 1.5rem; text-align: center;">Select Your Service Category</h3>
+                    
+                    <div class="wizard-cat-grid">
+                        <div class="wizard-cat-card selected" onclick="selectOnboardingCategory('purohit', this)">
+                            <div class="wizard-cat-icon">🌸</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Purohit</h4>
+                        </div>
+                        <div class="wizard-cat-card" onclick="selectOnboardingCategory('dancer', this)">
+                            <div class="wizard-cat-icon">💃</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Dancer</h4>
+                        </div>
+                        <div class="wizard-cat-card" onclick="selectOnboardingCategory('singer', this)">
+                            <div class="wizard-cat-icon">🎤</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Singer</h4>
+                        </div>
+                        <div class="wizard-cat-card" onclick="selectOnboardingCategory('musician', this)">
+                            <div class="wizard-cat-icon">🎻</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Musician</h4>
+                        </div>
+                        <div class="wizard-cat-card" onclick="selectOnboardingCategory('cow', this)">
+                            <div class="wizard-cat-icon">🐄</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Cow Owner</h4>
+                        </div>
+                        <div class="wizard-cat-card" onclick="selectOnboardingCategory('food', this)">
+                            <div class="wizard-cat-icon">🍲</div>
+                            <h4 style="font-size:0.8rem; font-family:var(--font-body); font-weight:600;">Caterer</h4>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="max-width: 400px; margin: 0 auto 1.5rem;">
+                        <label class="form-label" style="text-align: center;">Provider Entity Type</label>
+                        <div style="display:flex; gap: 20px; justify-content: center; margin-top: 10px;">
+                            <label style="display:flex; align-items:center; gap:8px;">
+                                <input type="radio" name="entity-type" value="individual" checked onchange="toggleTeamSize(false)"> Individual
+                            </label>
+                            <label style="display:flex; align-items:center; gap:8px;">
+                                <input type="radio" name="entity-type" value="organization" onchange="toggleTeamSize(true)"> Organization / Ashram
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="team-size-container" style="max-width: 400px; margin: 0 auto; display:none;">
+                        <label class="form-label" for="provider-team-size">Size of the Team (Ashram Members/Artists)</label>
+                        <input type="number" id="provider-team-size" class="form-input" min="2" value="5">
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="goToWizardStep(2)">Next Step</button>
+                    </div>
+                </div>
+
+                <!-- Pane 2: Skills & Details -->
+                <div class="wizard-pane" id="wizard-pane-2">
+                    <h3 style="margin-bottom: 1.5rem; text-align: center;" id="wizard-step-2-title">Service Details & Rates</h3>
+                    
+                    <!-- Form sections toggle based on category choice -->
+                    <div id="wizard-form-purohit">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Languages Spoken (Multi-select)</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                                    <label><input type="checkbox" value="Sanskrit" checked> Sanskrit</label>
+                                    <label><input type="checkbox" value="Hindi" checked> Hindi</label>
+                                    <label><input type="checkbox" value="Telugu"> Telugu</label>
+                                    <label><input type="checkbox" value="Tamil"> Tamil</label>
+                                    <label><input type="checkbox" value="Kannada"> Kannada</label>
+                                    <label><input type="checkbox" value="Marathi"> Marathi</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="purohit-style">Traditional State Style</label>
+                                <select id="purohit-style" class="form-select">
+                                    <option value="Vedic Smarta (South)">Vedic Smarta (South Style)</option>
+                                    <option value="Vedic (North Style)">Vedic (North Style)</option>
+                                    <option value="Bengali Sampradaya">Bengali Sampradaya</option>
+                                    <option value="Maharashtra Brahmin">Maharashtra Brahmin Style</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pujas & Services You Can Perform</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px;">
+                                <label><input type="checkbox" value="Satyanarayana Vratam Homa" checked> Satyanarayana Vratam</label>
+                                <label><input type="checkbox" value="Ganesh Homa" checked> Ganesh Homa</label>
+                                <label><input type="checkbox" value="Griha Pravesh" checked> Griha Pravesh (House Warming)</label>
+                                <label><input type="checkbox" value="Vastu Consultation" checked> Vastu Consultation</label>
+                                <label><input type="checkbox" value="Muhurtam Panchang Fixing"> Muhurtam Fixing</label>
+                                <label><input type="checkbox" value="Marriage Matchmaking"> Kundali Matchmaking</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wizard-form-artist" style="display: none;">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" id="artist-subcat-label">Art Form Category</label>
+                                <select id="artist-subcat" class="form-select">
+                                    <!-- Injected based on category choice -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="artist-experience">Years of Concert Experience</label>
+                                <input type="number" id="artist-experience" class="form-input" min="0" value="8">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wizard-form-cow" style="display: none;">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="cow-count">Number of Sacred Cows Available</label>
+                                <input type="number" id="cow-count" class="form-input" min="1" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cow-breed">Cow Breed / Details</label>
+                                <select id="cow-breed" class="form-select">
+                                    <option value="Desi Gir Cow">Desi Gir Cow (Auspicious for Pujas)</option>
+                                    <option value="Ongole Cow">Ongole Breed</option>
+                                    <option value="Kapila Cow">Kapila Cow</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wizard-form-food" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">Available Prasadam Items & Pricing per KG</label>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; background-color:var(--bg-primary); padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+                                    <span>Pulihara (Tamarind Rice)</span>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <input type="number" id="price-pulihara" class="form-input" style="width:80px;" value="12"><span>/ kg</span>
+                                    </div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; background-color:var(--bg-primary); padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+                                    <span>Chakrapongali (Sweet Rice)</span>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <input type="number" id="price-pongali" class="form-input" style="width:80px;" value="15"><span>/ kg</span>
+                                    </div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; background-color:var(--bg-primary); padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+                                    <span>Laddu (Sacred Sweet)</span>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <input type="number" id="price-laddu" class="form-input" style="width:80px;" value="18"><span>/ kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shared Pricing for hour-based providers -->
+                    <div class="grid-2" id="hourly-pricing-container">
+                        <div class="form-group">
+                            <label class="form-label" for="provider-rate">Expected Charges Per Hour ($) *</label>
+                            <input type="number" id="provider-rate" class="form-input" min="10" value="75">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="provider-experience-years">Experience in Field (Years)</label>
+                            <input type="number" id="provider-experience-years" class="form-input" min="0" value="5">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="goToWizardStep(1)">Back</button>
+                        <button class="btn btn-primary" onclick="goToWizardStep(3)">Next Step</button>
+                    </div>
+                </div>
+
+                <!-- Pane 3: Verification & Submit -->
+                <div class="wizard-pane" id="wizard-pane-3">
+                    <h3 style="margin-bottom: 1.5rem; text-align: center;">Credentials & Security</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="provider-name">Provider Display Name *</label>
+                        <input type="text" id="provider-name" class="form-input" placeholder="e.g., Pandit Krishna Shastri" required>
+                    </div>
+
+                    <!-- Show FSSAI requirement only if food service is selected -->
+                    <div class="form-group" id="fssai-field-container" style="display: none;">
+                        <label class="form-label" for="fssai-number" style="color:var(--accent-gold); font-weight:700;">FSSAI Registration Number *</label>
+                        <input type="text" id="fssai-number" class="form-input" placeholder="Enter 14-digit FSSAI number" pattern="\d{14}">
+                        <span style="font-size:0.75rem; color:var(--text-secondary);">Food safety standard registration is mandatory for ritual caterers.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Govt ID Upload (Aadhaar / Drivers License Mock)</label>
+                        <div style="border: 2px dashed var(--border-color); padding: 1.5rem; text-align: center; border-radius: 8px; cursor: pointer;" onclick="alert('File uploaded successfully (Simulation)')">
+                            📁 Click to Upload Document Scan
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="goToWizardStep(2)">Back</button>
+                        <button class="btn btn-primary" onclick="completeOnboardingSubmit()">Complete Registration</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Provider Dashboard (hidden until onboarding is finished) -->
+            <div id="provider-active-dashboard" style="display: none;">
+                <!-- Verification status warning banner -->
+                <div id="provider-verification-alert" style="margin-bottom: 1.5rem; display:none; background-color: rgba(239, 108, 0, 0.08); border: 1.5px solid var(--warning); border-radius: 12px; padding: 12px 18px; color: var(--text-primary);">
+                    <div style="font-weight: 700; color:var(--warning); display:flex; align-items:center; gap:8px;">
+                        ⚠️ Profile Pending COO Verification
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--text-secondary);">Your registration details have been submitted. The Chief Operations Officer must verify your documents (FSSAI/ID checks) before you become active in the customer catalog and eligible for auto-assignment.</p>
+                </div>
+
+                <div class="grid-3" style="margin-bottom: 2rem;">
+                    <div class="card" style="text-align: center; display:flex; flex-direction:column; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h4>My Profile</h4>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); margin: 8px 0;" id="active-provider-name-display">Shastriji</div>
+                            <span class="badge badge-gold" id="active-provider-type-display">Purohit</span>
+                        </div>
+                        <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 12px; margin-top:10px; background-color:rgba(198,40,40,0.1); border-color:var(--accent-red); color:var(--text-primary);" onclick="handleProviderLogout()">Logout</button>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h4>Wallet & Earnings</h4>
+                        <div class="wallet-balance" id="provider-wallet-balance">$180.00</div>
+                        <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 4px 12px;" onclick="requestPayout()">Request Cashout</button>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <h4>Completed Bookings</h4>
+                        <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-orange); font-family: var(--font-heading); margin: 8px 0;">24</div>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Rating: 4.9⭐ (12 reviews)</span>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <!-- Availability Calendar -->
+                    <div class="calendar-widget">
+                        <div class="calendar-header">
+                            <h3>Availability Calendar</h3>
+                            <div style="font-weight: 700; color: var(--accent-gold);">November 2026</div>
+                        </div>
+                        <div class="calendar-grid-days">
+                            <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+                        </div>
+                        <div class="calendar-grid" id="provider-calendar-grid">
+                            <!-- Populated dynamically via provider.js -->
+                        </div>
+                        <div class="calendar-legend">
+                            <div class="legend-item"><div class="legend-dot" style="background-color: var(--success);"></div> Available</div>
+                            <div class="legend-item"><div class="legend-dot" style="background-color: var(--error);"></div> Blocked</div>
+                            <div class="legend-item"><div class="legend-dot" style="background-color: var(--accent-gold);"></div> Booked Event</div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Job Orders -->
+                    <div class="card" style="display:flex; flex-direction:column;">
+                        <h3 style="margin-bottom: 1.5rem;">Accepted Orders & Reminders</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px; flex-grow:1;" id="provider-jobs-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             OPERATIONS & SUPPORT TEAM VIEW
+             ======================================================== -->
+        <section id="ops-view" class="app-view">
+            <!-- Stats overview cards -->
+            <div class="grid-4" style="margin-bottom: 2rem;">
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Ongoing Orders Today</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-gold); font-family:var(--font-heading);">18</div>
+                    <span class="badge badge-success">8 Completed</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Orders with Issues/Delays</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-red); font-family:var(--font-heading);" id="ops-anomaly-count">1</div>
+                    <span class="badge badge-danger">Requires Action</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Avg Customer Sentiment</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: #FFF; font-family:var(--font-heading);">89%</div>
+                    <span class="badge badge-gold" style="background-color:rgba(255,255,255,0.08);">Positive Net</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Live System Pricing Mode</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-orange); font-family:var(--font-heading);" id="ops-commission-display">12%</div>
+                    <span class="badge badge-gold" id="ops-pricing-badge">Standard Demand</span>
+                </div>
+            </div>
+
+            <!-- Heatmap and Muhurtam Scheduler -->
+            <div class="grid-3" style="margin-bottom: 2rem;">
+                <!-- Demand/Resource Heatmap -->
+                <div class="card ops-heatmap-card">
+                    <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                        Resource Heatmap 
+                        <span style="font-size:0.75rem; color:var(--text-secondary); font-family:var(--font-body); font-weight:normal;">Density: Booked vs Free</span>
+                    </h3>
+                    <div class="heatmap-grid" id="ops-heatmap-container">
+                        <!-- Populated dynamically via ops.js -->
+                    </div>
+                </div>
+
+                <!-- Muhurtam Live Consultation queue -->
+                <div class="card" style="grid-column: span 2; display:flex; flex-direction:column; height:380px;">
+                    <h3>Muhurtam Consultation Requests Queue</h3>
+                    <div style="overflow-y:auto; flex-grow:1; margin-top:1rem; display:flex; flex-direction:column; gap:10px;" id="ops-muhurtam-requests-queue">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table of orders, Dynamic commission and contingency controls -->
+            <div class="grid-3">
+                <div class="card" style="grid-column: span 2;">
+                    <h3>Active Operations Board</h3>
+                    <div class="table-container">
+                        <table class="ops-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Client Details</th>
+                                    <th>Service Requested</th>
+                                    <th>Provider Assigned</th>
+                                    <th>Scheduled Date</th>
+                                    <th>Risk Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ops-active-orders-table">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin settings & dynamic commission fee configurator -->
+                <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <h3>Dynamic Admin Controls</h3>
+                        
+                        <!-- Commission Slider -->
+                        <div class="dynamic-fee-slider-container">
+                            <label class="form-label" style="font-weight:700; color:var(--accent-gold);">Dynamic Commission Fee (%)</label>
+                            <input type="range" id="ops-commission-slider" min="5" max="30" value="12" step="1" style="width:100%;" oninput="updateCommissionRate(this.value)">
+                            <div class="slider-labels">
+                                <span>5% (Low Demand)</span>
+                                <span>30% (High Peak)</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">Adjusts platform booking commission live based on regional demand and peak Muhurtam season charts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Window shoppers follow up list -->
+                    <div style="margin-top: 1.5rem;">
+                        <h4 style="margin-bottom: 8px;">Proactive Window Shopping Follow-ups</h4>
+                        <div id="ops-window-shoppers" style="display:flex; flex-direction:column; gap:8px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             CHIEF OPERATIONS OFFICER (COO) VIEW
+             ======================================================== -->
+        <section id="coo-view" class="app-view">
+            <!-- Stats overview cards -->
+            <div class="grid-4" style="margin-bottom: 2rem;">
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Total Partners Registered</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--accent-gold); font-family:var(--font-heading);" id="coo-total-partners">0</div>
+                    <span class="badge badge-gold" id="coo-purohit-count">0 Purohits</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Awaiting Verification</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--warning); font-family:var(--font-heading);" id="coo-pending-approvals">0</div>
+                    <span class="badge badge-warning">Requires Review</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Active Approved Partners</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--success); font-family:var(--font-heading);" id="coo-approved-partners">0</div>
+                    <span class="badge badge-success">Live on App</span>
+                </div>
+                <div class="card">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Suspended Partners</span>
+                    <div style="font-size: 2.25rem; font-weight: 800; color: var(--error); font-family:var(--font-heading);" id="coo-suspended-partners">0</div>
+                    <span class="badge badge-danger">Disabled</span>
+                </div>
+            </div>
+
+            <!-- Table of all registered providers -->
+            <div class="card">
+                <h3>Partner Vetting & Verification Queue</h3>
+                <div class="table-container">
+                    <table class="ops-table">
+                        <thead>
+                            <tr>
+                                <th>Partner ID</th>
+                                <th>Display Name</th>
+                                <th>Category</th>
+                                <th>Experience</th>
+                                <th>Details Info</th>
+                                <th>Verification Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coo-providers-table">
+                            <!-- Populated dynamically via coo.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Interactive Detailed Service Booking Modal -->
+    <div id="provider-detail-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal('provider-detail-modal')">×</button>
+            <div id="modal-provider-content">
+                <!-- Injected via customer.js (Handles Puja configurations and auto-assign displays) -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Assisted Booking Modal (Ops portal booking on behalf of customer) -->
+    <div id="assisted-booking-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal('assisted-booking-modal')">×</button>
+            <h2 style="margin-bottom:1.5rem; border-bottom:1.5px solid var(--accent-gold); padding-bottom:8px;">Ops Assisted Booking Console</h2>
+            <form id="assisted-booking-form" onsubmit="executeAssistedBooking(event)">
+                <input type="hidden" id="assist-request-id">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" id="assist-client-name" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="text" id="assist-client-phone" class="form-input" readonly>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Auspicious Date Fixed</label>
+                        <select id="assist-booking-date" class="form-select" required>
+                            <!-- Populated with two slots in ops.js -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Purohit Style</label>
+                        <input type="text" id="assist-client-style" class="form-input" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Available Package / Purohit</label>
+                    <select id="assist-purohit-select" class="form-select" required>
+                        <!-- Injected dynamically based on style matching -->
+                    </select>
+                </div>
+                <div style="background-color:var(--bg-tertiary); padding:1rem; border-radius:8px; border:1px solid var(--border-color); margin-bottom:1.5rem;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700;">
+                        <span>Total Ritual Package Cost</span>
+                        <span id="assist-package-price" style="color:var(--accent-gold);">$250.00</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">
+                        <span>Advance Due (20%)</span>
+                        <span id="assist-advance-price">$50.00</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Create Booking & Request Client Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- COO Credential Inspector Modal -->
+    <div id="coo-inspector-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal('coo-inspector-modal')">×</button>
+            <h2 style="margin-bottom:1.5rem; border-bottom:1.5px solid var(--accent-gold); padding-bottom:8px;">COO Credential Audit Console</h2>
+            <div id="coo-modal-inspector-content">
+                <!-- Injected via coo.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script src="js/app.js"></script>
+    <script src="js/customer.js"></script>
+    <script src="js/provider.js"></script>
+    <script src="js/ops.js"></script>
+    <script src="js/coo.js"></script>
+</body>
+</html>
